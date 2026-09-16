@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Academic Attendance Admin</title>
+<link rel="stylesheet" href="style/admin.css">
+
+
+</head>
+
+<body>
+
+<div id="loginScreen">
+
+    <div class="loginBox">
+
+        <div class="loginLogo">
+            A
+        </div>
+
+        <h1>Admin Login</h1>
+
+        <p>
+            Academic Attendance Portal
+        </p>
+
+
+        <div class="loginInput">
+
+            <label>
+                Email
+            </label>
+
+            <input
+                id="loginEmail"
+                type="email"
+                autocomplete="username"
+                placeholder="Admin email"
+            >
+
+        </div>
+
+
+        <div class="loginInput">
+
+            <label>
+                Password
+            </label>
+
+<input id="loginPassword"  type="password"autocomplete="current-password" placeholder="Admin password">
+
+        </div>
+
+
+ <button id="loginButton" class="loginButton" >
+            Login to Admin
+ </button>
+
+
+<div id="loginError" class="loginError"></div>
+<div class="loginFooter">
+
+    Protected by Firebase Authentication
+ </div>
+
+    </div>
+
+</div>
+
+
+
+<div id="adminApp">
+<div class="container">
+
+
+<header class="header">
+
+    <div class="brand">
+
+        <h1>
+            Academic Attendance Admin
+        </h1>
+
+        <p>
+            Attendance Management Dashboard
+        </p>
+
+    </div>
+
+
+    <div class="headerActions">
+
+ <div id="liveStatus"   class="live closed">
+            ● CLASS CLOSED
+        </div>
+
+  <button  id="logoutButton" class="logoutBtn" >
+            Logout
+        </button>
+
+    </div>
+
+</header>
+
+
+<div class="grid">
+
+    <div class="stat">
+
+        <small>
+            Total Students Present
+        </small>
+
+        <strong id="studentCount">
+            0
+        </strong>
+
+    </div>
+
+
+    <div class="stat">
+
+        <small>
+            Total Class
+        </small>
+
+        <strong id="totalClassDisplay">
+            0
+        </strong>
+
+    </div>
+
+
+    <div class="stat">
+
+        <small>
+            Current Class Code
+        </small>
+
+        <strong id="codeDisplay">
+            ----
+        </strong>
+
+    </div>
+
+
+    <div class="stat">
+
+        <small>
+            Active Students Today
+        </small>
+
+        <strong id="todayCount">
+            0
+        </strong>
+
+    </div>
+
+</div>
+
+
+
+<div class="card">
+
+    <h2>
+        Class Control
+    </h2>
+
+
+    <div class="controls">
+
+<input id="classCode"  type="text"  maxlength="4"  inputmode="numeric"  placeholder="4 digit class code" >
+<input id="totalClasses" type="number" min="1" max="1000" placeholder="Total class">
+
+
+        <button id="saveSettings" >
+            Save Settings
+        </button>
+
+
+        <button id="startClass"  class="green">
+            Start Present
+        </button>
+
+    </div>
+
+
+    <div class="controls" style="margin-top:12px;" >
+
+        <button  id="offClass" class="red">
+            Class OFF
+        </button>
+
+
+        <button id="syncSheets" class="gray">
+            Sync Google Sheets
+        </button>
+
+    </div>
+
+
+    <div id="classInfo" class="info">
+        Loading...
+    </div>
+
+
+    <div id="message" class="message"></div>
+
+</div>
+
+
+<div class="card">
+
+    <h2>
+        Attendance Records
+    </h2>
+
+
+    <div class="controls">
+
+        <select id="departmentFilter">
+
+            <option value="ALL">
+                All Departments
+            </option>
+
+            <option value="CSE">
+                CSE
+            </option>
+
+            <option value="EEE">
+                EEE
+            </option>
+
+            <option value="ENGLISH">
+                English
+            </option>
+
+            <option value="BDPH">
+                BDPH
+            </option>
+
+            <option value="FASHION DESIGN">
+                Fashion Design
+            </option>
+
+        </select>
+
+
+        <select id="levelFilter">
+
+            <option value="ALL">
+                All Levels
+            </option>
+
+            <option value="1.1">1.1</option>
+            <option value="1.2">1.2</option>
+            <option value="2.1">2.1</option>
+            <option value="2.2">2.2</option>
+            <option value="3.1">3.1</option>
+            <option value="3.2">3.2</option>
+            <option value="4.1">4.1</option>
+            <option value="4.2">4.2</option>
+
+        </select>
+
+
+        <input
+            id="dateFilter"
+            type="date"
+        >
+
+
+        <button
+            id="clearFilter"
+            class="gray"
+        >
+            Clear Filter
+        </button>
+
+    </div>
+
+
+    <div class="tableWrap">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Student ID
+                    </th>
+
+                    <th>
+                        Name
+                    </th>
+
+                    <th>
+                        Department
+                    </th>
+
+                    <th>
+                        Level
+                    </th>
+
+                    <th>
+                        Present
+                    </th>
+
+                    <th>
+                        Total
+                    </th>
+
+                    <th>
+                        Absent
+                    </th>
+
+                    <th>
+                        Attendance %
+                    </th>
+
+                    <th>
+                        Mark / 10
+                    </th>
+
+                    <th>
+                        Last Present
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="attendanceTable">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+
+<script type="module" src="script/admin.js"> </script>
+
+</body>
+</html>
