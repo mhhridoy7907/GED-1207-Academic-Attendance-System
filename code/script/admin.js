@@ -1,17 +1,16 @@
-/*
-======= admin script====
- */
 
-
-/* =====================================================
-   FIREBASE APP
-===================================================== */
+/* ==================================================
+   Developed by: MH2 HRIDOY
+   Contact: 01962-388 570
+   Email: mhhridoy7907@gmail.com
+   GitHub: @mhhridoy7907
+   ================================================== */
 
 import {
     initializeApp
 }
 from
-"https://w**************************pp.js";
+"ht****************************app.js";
 
 
 import {
@@ -21,7 +20,7 @@ import {
     update
 }
 from
-"https://ww************************atabase.js";
+"http****************************abase.js";
 
 
 import {
@@ -31,7 +30,7 @@ import {
     signOut
 }
 from
-"http************************se-auth.js";
+"htt****************************th.js";
 
 
 /* =====================================================
@@ -41,28 +40,28 @@ from
 const firebaseConfig = {
 
     apiKey:
-        "AIza************************mZgeAAIk",
+        "AI****************************eAAIk",
 
     authDomain:
-        "ged************************p.com",
+        "ged1207.firebaseapp.com",
 
     databaseURL:
-        "http************************asedatabase.app",
+        "https****************************edatabase.app",
 
     projectId:
-        "************************7",
+        "g**07",
 
     storageBucket:
-        "ge************************.app",
+        "****************************",
 
     messagingSenderId:
-        "7************************433",
+        "7****************************987433",
 
     appId:
-        "1:************************4a0bb8",
+        "1:72****************************18817754a0bb8",
 
     measurementId:
-        "G-H************************T90"
+        "G-****************************DSFT90"
 
 };
 
@@ -80,71 +79,55 @@ const auth =
 
 
 /* =====================================================
-   ONLY THIS UID IS ADMIN
+   ADMIN UID
 ===================================================== */
 
-const ADMIN_UID =
-    "uv************************j1";
+const ADMIN_UID = "uv*****************************sIrj1";
 
 
 /* =====================================================
-   APPS SCRIPT
+   GOOGLE APPS SCRIPT
 ===================================================== */
 
-const APPS_SCRIPT_URL =
-"https://script.google.com*************oA/exec";
+const APPS_SCRIPT_URL = "https://******************Wi/exec";
 
 
-/* =====================================================
-   VARIABLES
-===================================================== */
 
 let settings = {};
-
 let attendance = {};
-
 let databaseListenersStarted = false;
 
 
-/* =====================================================
-   ELEMENTS
-===================================================== */
 
 const loginScreen =
     document.getElementById(
         "loginScreen"
     );
 
-
 const adminApp =
     document.getElementById(
         "adminApp"
     );
-
 
 const loginButton =
     document.getElementById(
         "loginButton"
     );
 
-
 const loginEmail =
     document.getElementById(
         "loginEmail"
     );
-
 
 const loginPassword =
     document.getElementById(
         "loginPassword"
     );
 
-
 const loginError =
     document.getElementById(
         "loginError"
     );
-
 
 const table =
     document.getElementById(
@@ -160,11 +143,12 @@ onAuthStateChanged(
     auth,
     user => {
 
-        if(user){
+        if (user) {
 
-            if(
-                user.uid === ADMIN_UID
-            ){
+            if (
+                user.uid ===
+                ADMIN_UID
+            ) {
 
                 loginScreen.style.display =
                     "none";
@@ -177,7 +161,7 @@ onAuthStateChanged(
 
                 startDatabaseListeners();
 
-            }else{
+            } else {
 
                 signOut(auth);
 
@@ -192,7 +176,7 @@ onAuthStateChanged(
 
             }
 
-        }else{
+        } else {
 
             loginScreen.style.display =
                 "flex";
@@ -225,7 +209,7 @@ loginButton.addEventListener(
             "";
 
 
-        if(!email){
+        if (!email) {
 
             loginError.textContent =
                 "Enter your admin email.";
@@ -235,7 +219,7 @@ loginButton.addEventListener(
         }
 
 
-        if(!password){
+        if (!password) {
 
             loginError.textContent =
                 "Enter your password.";
@@ -252,7 +236,7 @@ loginButton.addEventListener(
             "Logging in...";
 
 
-        try{
+        try {
 
             const result =
                 await signInWithEmailAndPassword(
@@ -262,10 +246,10 @@ loginButton.addEventListener(
                 );
 
 
-            if(
+            if (
                 result.user.uid !==
                 ADMIN_UID
-            ){
+            ) {
 
                 await signOut(auth);
 
@@ -276,55 +260,30 @@ loginButton.addEventListener(
             }
 
 
-            loginPassword.value =
-                "";
+            loginPassword.value = "";
 
-        }catch(error){
+
+        } catch (error) {
 
             console.error(error);
 
 
-            if(
+            if (
                 error.message ===
                 "NOT_ADMIN"
-            ){
+            ) {
 
                 loginError.textContent =
-                    "This Firebase account is not the Admin account.";
+                    "This account is not the Admin account.";
 
-            }else if(
-                error.code ===
-                "auth/invalid-credential"
-            ){
+            } else {
 
                 loginError.textContent =
                     "Incorrect email or password.";
 
-            }else if(
-                error.code ===
-                "auth/user-not-found"
-            ){
-
-                loginError.textContent =
-                    "Admin account was not found.";
-
-            }else if(
-                error.code ===
-                "auth/wrong-password"
-            ){
-
-                loginError.textContent =
-                    "Incorrect password.";
-
-            }else{
-
-                loginError.textContent =
-                    error.message ||
-                    "Login failed.";
-
             }
 
-        }finally{
+        } finally {
 
             loginButton.disabled =
                 false;
@@ -339,24 +298,23 @@ loginButton.addEventListener(
 
 
 /* =====================================================
-   ENTER KEY LOGIN
+   ENTER KEY
 ===================================================== */
 
 [
     loginEmail,
     loginPassword
-]
-.forEach(
+].forEach(
     input => {
 
         input.addEventListener(
             "keydown",
             event => {
 
-                if(
+                if (
                     event.key ===
                     "Enter"
-                ){
+                ) {
 
                     loginButton.click();
 
@@ -374,32 +332,32 @@ loginButton.addEventListener(
 ===================================================== */
 
 document
-.getElementById(
-    "logoutButton"
-)
-.addEventListener(
-    "click",
-    async () => {
+    .getElementById(
+        "logoutButton"
+    )
+    .addEventListener(
+        "click",
+        async () => {
 
-        await signOut(auth);
+            await signOut(auth);
 
-    }
-);
+        }
+    );
 
 
 /* =====================================================
    BANGLADESH DATE
 ===================================================== */
 
-function getBDDate(){
+function getBDDate() {
 
     return new Intl.DateTimeFormat(
         "en-CA",
         {
-            timeZone:"Asia/Dhaka",
-            year:"numeric",
-            month:"2-digit",
-            day:"2-digit"
+            timeZone: "Asia/Dhaka",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit"
         }
     ).format(
         new Date()
@@ -412,17 +370,18 @@ function getBDDate(){
    DATABASE LISTENERS
 ===================================================== */
 
-function startDatabaseListeners(){
+function startDatabaseListeners() {
 
-    if(databaseListenersStarted){
+    if (
+        databaseListenersStarted
+    ) {
         return;
     }
+
 
     databaseListenersStarted =
         true;
 
-
-    /* SETTINGS */
 
     onValue(
         ref(
@@ -435,14 +394,11 @@ function startDatabaseListeners(){
                 snapshot.val() || {};
 
             updateDashboard();
-
             renderTable();
 
         }
     );
 
-
-    /* ATTENDANCE */
 
     onValue(
         ref(
@@ -455,7 +411,6 @@ function startDatabaseListeners(){
                 snapshot.val() || {};
 
             updateDashboard();
-
             renderTable();
 
         }
@@ -468,7 +423,7 @@ function startDatabaseListeners(){
    DASHBOARD
 ===================================================== */
 
-function updateDashboard(){
+function updateDashboard() {
 
     const active =
         settings.classActive === true &&
@@ -483,7 +438,7 @@ function updateDashboard(){
         );
 
 
-    if(active){
+    if (active) {
 
         live.textContent =
             "● CLASS OPEN";
@@ -491,7 +446,7 @@ function updateDashboard(){
         live.className =
             "live open";
 
-    }else{
+    } else {
 
         live.textContent =
             "● CLASS CLOSED";
@@ -503,65 +458,66 @@ function updateDashboard(){
 
 
     document
-    .getElementById(
-        "totalClassDisplay"
-    )
-    .textContent =
-        settings.totalClasses || 0;
+        .getElementById(
+            "totalClassDisplay"
+        )
+        .textContent =
+            settings.totalClasses || 0;
 
 
     document
-    .getElementById(
-        "codeDisplay"
-    )
-    .textContent =
-        settings.classCode || "----";
-
-
-    let today = 0;
+        .getElementById(
+            "codeDisplay"
+        )
+        .textContent =
+            settings.classCode || "----";
 
 
     const todayDate =
         getBDDate();
 
 
+    let today = 0;
+
+
     Object.values(attendance)
-    .forEach(
-        dates => {
+        .forEach(
+            dates => {
 
-            if(!dates){
-                return;
+                if (!dates) {
+                    return;
+                }
+
+
+                if (
+                    dates[todayDate] &&
+                    dates[todayDate].present === true
+                ) {
+
+                    today++;
+
+                }
+
             }
-
-
-            if(
-                dates[todayDate]
-            ){
-
-                today++;
-
-            }
-
-        }
-    );
+        );
 
 
     document
-    .getElementById(
-        "todayCount"
-    )
-    .textContent =
-        today;
+        .getElementById(
+            "todayCount"
+        )
+        .textContent =
+            today;
 
 
     document
-    .getElementById(
-        "studentCount"
-    )
-    .textContent =
-        Object.keys(
-            attendance
-        ).length;
+        .getElementById(
+            "studentCount"
+        )
+        .textContent =
+            Object.keys(
+                attendance
+            ).length;
 
 
     const autoOff =
@@ -574,7 +530,7 @@ function updateDashboard(){
         "Class is currently CLOSED.";
 
 
-    if(active){
+    if (active) {
 
         info =
             "Class OPEN | Code: " +
@@ -588,11 +544,11 @@ function updateDashboard(){
 
 
     document
-    .getElementById(
-        "classInfo"
-    )
-    .textContent =
-        info;
+        .getElementById(
+            "classInfo"
+        )
+        .textContent =
+            info;
 
 }
 
@@ -602,95 +558,91 @@ function updateDashboard(){
 ===================================================== */
 
 document
-.getElementById(
-    "saveSettings"
-)
-.addEventListener(
-    "click",
-    async () => {
+    .getElementById(
+        "saveSettings"
+    )
+    .addEventListener(
+        "click",
+        async () => {
 
-        const code =
-            document
-            .getElementById(
-                "classCode"
-            )
-            .value
-            .trim();
-
-
-        const total =
-            Number(
+            const code =
                 document
-                .getElementById(
-                    "totalClasses"
-                )
-                .value
-            );
+                    .getElementById(
+                        "classCode"
+                    )
+                    .value
+                    .trim();
 
 
-        if(
-            !/^\d{4}$/.test(code)
-        ){
+            const total =
+                Number(
+                    document
+                        .getElementById(
+                            "totalClasses"
+                        )
+                        .value
+                );
 
-            showMessage(
-                "Class code must be exactly 4 digits."
-            );
 
-            return;
+            if (
+                !/^\d{4}$/.test(code)
+            ) {
+
+                showMessage(
+                    "Class code must be exactly 4 digits."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                !Number.isInteger(total) ||
+                total < 1 ||
+                total > 1000
+            ) {
+
+                showMessage(
+                    "Total class must be between 1 and 1000."
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                await update(
+                    ref(
+                        db,
+                        "settings"
+                    ),
+                    {
+                        classCode: code,
+                        totalClasses: total
+                    }
+                );
+
+
+                showMessage(
+                    "Settings saved successfully."
+                );
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                showMessage(
+                    "Could not save settings."
+                );
+
+            }
 
         }
-
-
-        if(
-            !Number.isInteger(total) ||
-            total < 1 ||
-            total > 1000
-        ){
-
-            showMessage(
-                "Total class must be between 1 and 1000."
-            );
-
-            return;
-
-        }
-
-
-        try{
-
-            await update(
-                ref(
-                    db,
-                    "settings"
-                ),
-                {
-
-                    classCode:
-                        code,
-
-                    totalClasses:
-                        total
-
-                }
-            );
-
-
-            showMessage(
-                "Settings saved successfully."
-            );
-
-        }catch(error){
-
-            console.error(error);
-
-            showMessage(
-                "Could not save settings."
-            );
-
-        }
-
-    }
-);
+    );
 
 
 /* =====================================================
@@ -698,112 +650,119 @@ document
 ===================================================== */
 
 document
-.getElementById(
-    "startClass"
-)
-.addEventListener(
-    "click",
-    async () => {
+    .getElementById(
+        "startClass"
+    )
+    .addEventListener(
+        "click",
+        async () => {
 
-        const code =
-            document
-            .getElementById(
-                "classCode"
-            )
-            .value
-            .trim();
-
-
-        const total =
-            Number(
+            const code =
                 document
-                .getElementById(
-                    "totalClasses"
-                )
-                .value
-            );
+                    .getElementById(
+                        "classCode"
+                    )
+                    .value
+                    .trim();
 
 
-        if(
-            !/^\d{4}$/.test(code)
-        ){
+            const total =
+                Number(
+                    document
+                        .getElementById(
+                            "totalClasses"
+                        )
+                        .value
+                );
 
-            showMessage(
-                "Enter a 4 digit class code."
-            );
 
-            return;
+            if (
+                !/^\d{4}$/.test(code)
+            ) {
+
+                showMessage(
+                    "Enter a 4 digit class code."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                !Number.isInteger(total) ||
+                total < 1 ||
+                total > 1000
+            ) {
+
+                showMessage(
+                    "Enter total class first."
+                );
+
+                return;
+
+            }
+
+
+            const start =
+                Date.now();
+
+
+            const autoOff =
+                start +
+                (
+                    18 *
+                    60 *
+                    60 *
+                    1000
+                );
+
+
+            try {
+
+                await update(
+                    ref(
+                        db,
+                        "settings"
+                    ),
+                    {
+
+                        classActive:
+                            true,
+
+                        classCode:
+                            code,
+
+                        totalClasses:
+                            total,
+
+                        presentStart:
+                            start,
+
+                        autoOffAt:
+                            autoOff
+
+                    }
+                );
+
+
+                showMessage(
+                    "Class started. Auto OFF after 18 hours."
+                );
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                showMessage(
+                    "Could not start class."
+                );
+
+            }
 
         }
-
-
-        if(
-            !Number.isInteger(total) ||
-            total < 1
-        ){
-
-            showMessage(
-                "Enter total class first."
-            );
-
-            return;
-
-        }
-
-
-        const start =
-            Date.now();
-
-
-        const autoOff =
-            start +
-            (18 * 60 * 60 * 1000);
-
-
-        try{
-
-            await update(
-                ref(
-                    db,
-                    "settings"
-                ),
-                {
-
-                    classActive:
-                        true,
-
-                    classCode:
-                        code,
-
-                    totalClasses:
-                        total,
-
-                    presentStart:
-                        start,
-
-                    autoOffAt:
-                        autoOff
-
-                }
-            );
-
-
-            showMessage(
-                "Class started. Auto OFF after 18 hours."
-            );
-
-        }catch(error){
-
-            console.error(error);
-
-            showMessage(
-                "Could not start class."
-            );
-
-        }
-
-    }
-);
+    );
 
 
 /* =====================================================
@@ -811,42 +770,44 @@ document
 ===================================================== */
 
 document
-.getElementById(
-    "offClass"
-)
-.addEventListener(
-    "click",
-    async () => {
+    .getElementById(
+        "offClass"
+    )
+    .addEventListener(
+        "click",
+        async () => {
 
-        try{
+            try {
 
-            await update(
-                ref(
-                    db,
-                    "settings"
-                ),
-                {
-                    classActive:false
-                }
-            );
+                await update(
+                    ref(
+                        db,
+                        "settings"
+                    ),
+                    {
+                        classActive:
+                            false
+                    }
+                );
 
 
-            showMessage(
-                "Class turned OFF."
-            );
+                showMessage(
+                    "Class turned OFF."
+                );
 
-        }catch(error){
 
-            console.error(error);
+            } catch (error) {
 
-            showMessage(
-                "Could not turn class OFF."
-            );
+                console.error(error);
+
+                showMessage(
+                    "Could not turn class OFF."
+                );
+
+            }
 
         }
-
-    }
-);
+    );
 
 
 /* =====================================================
@@ -857,16 +818,15 @@ document
     "departmentFilter",
     "levelFilter",
     "dateFilter"
-]
-.forEach(
+].forEach(
     id => {
 
         document
-        .getElementById(id)
-        .addEventListener(
-            "change",
-            renderTable
-        );
+            .getElementById(id)
+            .addEventListener(
+                "change",
+                renderTable
+            );
 
     }
 );
@@ -877,74 +837,107 @@ document
 ===================================================== */
 
 document
-.getElementById(
-    "clearFilter"
-)
-.addEventListener(
-    "click",
-    () => {
+    .getElementById(
+        "clearFilter"
+    )
+    .addEventListener(
+        "click",
+        () => {
 
-        document
-        .getElementById(
-            "departmentFilter"
+            document
+                .getElementById(
+                    "departmentFilter"
+                )
+                .value =
+                "ALL";
+
+
+            document
+                .getElementById(
+                    "levelFilter"
+                )
+                .value =
+                "ALL";
+
+
+            document
+                .getElementById(
+                    "dateFilter"
+                )
+                .value =
+                "";
+
+
+            renderTable();
+
+        }
+    );
+
+
+/* =====================================================
+   SAFE HTML
+===================================================== */
+
+function safe(value) {
+
+    return String(
+        value ?? ""
+    )
+        .replaceAll(
+            "&",
+            "&amp;"
         )
-        .value =
-            "ALL";
-
-
-        document
-        .getElementById(
-            "levelFilter"
+        .replaceAll(
+            "<",
+            "&lt;"
         )
-        .value =
-            "ALL";
-
-
-        document
-        .getElementById(
-            "dateFilter"
+        .replaceAll(
+            ">",
+            "&gt;"
         )
-        .value =
-            "";
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 
-
-        renderTable();
-
-    }
-);
+}
 
 
 /* =====================================================
    RENDER TABLE
 ===================================================== */
 
-function renderTable(){
+function renderTable() {
 
     table.innerHTML = "";
 
 
     const department =
         document
-        .getElementById(
-            "departmentFilter"
-        )
-        .value;
+            .getElementById(
+                "departmentFilter"
+            )
+            .value;
 
 
     const level =
         document
-        .getElementById(
-            "levelFilter"
-        )
-        .value;
+            .getElementById(
+                "levelFilter"
+            )
+            .value;
 
 
     const date =
         document
-        .getElementById(
-            "dateFilter"
-        )
-        .value;
+            .getElementById(
+                "dateFilter"
+            )
+            .value;
 
 
     const total =
@@ -959,187 +952,176 @@ function renderTable(){
     Object.entries(
         attendance
     )
-    .forEach(
-        ([studentId,dates]) => {
+        .forEach(
+            ([studentId, dates]) => {
 
-            if(!dates){
-                return;
-            }
-
-
-            const records =
-                Object.entries(dates)
-                .filter(
-                    ([recordDate,record]) => {
-
-                        if(!record){
-                            return false;
-                        }
+                if (!dates) {
+                    return;
+                }
 
 
-                        if(
-                            date &&
-                            recordDate !== date
-                        ){
+                const records =
+                    Object.entries(dates)
+                        .filter(
+                            ([recordDate, record]) => {
 
-                            return false;
-
-                        }
-
-
-                        if(
-                            department !== "ALL" &&
-                            record.department !==
-                            department
-                        ){
-
-                            return false;
-
-                        }
+                                if (!record) {
+                                    return false;
+                                }
 
 
-                        if(
-                            level !== "ALL" &&
-                            record.level !==
-                            level
-                        ){
-
-                            return false;
-
-                        }
+                                if (
+                                    date &&
+                                    recordDate !== date
+                                ) {
+                                    return false;
+                                }
 
 
-                        return true;
-
-                    }
-                );
-
-
-            if(
-                records.length === 0
-            ){
-
-                return;
-
-            }
+                                if (
+                                    department !== "ALL" &&
+                                    record.department !== department
+                                ) {
+                                    return false;
+                                }
 
 
-            const allRecords =
-                Object.values(dates)
-                .filter(
-                    r =>
-                        r &&
-                        r.present === true
-                );
+                                if (
+                                    level !== "ALL" &&
+                                    record.level !== level
+                                ) {
+                                    return false;
+                                }
 
 
-            const present =
-                allRecords.length;
+                                return true;
+
+                            }
+                        );
 
 
-            const absent =
-                Math.max(
-                    0,
-                    total - present
-                );
+                if (
+                    records.length === 0
+                ) {
+                    return;
+                }
 
 
-            const percentage =
-                total > 0
-                ? (present / total) * 100
-                : 0;
+                const allRecords =
+                    Object.entries(dates)
+                        .map(
+                            ([recordDate, record]) => {
+
+                                if (
+                                    !record ||
+                                    record.present !== true
+                                ) {
+                                    return null;
+                                }
 
 
-            const mark =
-                total > 0
-                ? Math.min(
-                    10,
-                    (present / total) * 10
-                )
-                : 0;
+                                return {
+                                    date:
+                                        recordDate,
+                                    ...record
+                                };
 
-
-            const latest =
-                allRecords
-                .slice()
-                .sort(
-                    (a,b) =>
-                        String(b.date)
-                        .localeCompare(
-                            String(a.date)
+                            }
                         )
-                )[0];
+                        .filter(Boolean);
 
 
-            const safe =
-                value =>
-                    String(
-                        value ?? ""
-                    )
-                    .replaceAll(
-                        "&",
-                        "&amp;"
-                    )
-                    .replaceAll(
-                        "<",
-                        "&lt;"
-                    )
-                    .replaceAll(
-                        ">",
-                        "&gt;"
-                    )
-                    .replaceAll(
-                        '"',
-                        "&quot;"
-                    )
-                    .replaceAll(
-                        "'",
-                        "&#039;"
+                /* IMPORTANT:
+                   Present cannot exceed total
+                */
+
+                const present =
+                    Math.min(
+                        allRecords.length,
+                        total
                     );
 
 
-            students.push({
+                const absent =
+                    Math.max(
+                        0,
+                        total - present
+                    );
 
-                studentId,
 
-                name:
-                    latest?.name || "",
+                const percentage =
+                    total > 0
+                        ? Math.min(
+                            100,
+                            (present / total) * 100
+                        )
+                        : 0;
 
-                department:
-                    latest?.department || "",
 
-                level:
-                    latest?.level || "",
+                const mark =
+                    total > 0
+                        ? Math.min(
+                            10,
+                            (present / total) * 10
+                        )
+                        : 0;
 
-                present,
 
-                total,
+                const latest =
+                    allRecords
+                        .slice()
+                        .sort(
+                            (a, b) =>
+                                String(b.date)
+                                    .localeCompare(
+                                        String(a.date)
+                                    )
+                        )[0];
 
-                absent,
 
-                percentage:
-                    percentage.toFixed(2),
+                students.push({
 
-                mark:
-                    mark.toFixed(2),
+                    studentId,
 
-                lastDate:
-                    latest?.date || "",
+                    name:
+                        latest?.name || "",
 
-                safe
+                    department:
+                        latest?.department || "",
 
-            });
+                    level:
+                        latest?.level || "",
 
-        }
-    );
+                    present,
+
+                    total,
+
+                    absent,
+
+                    percentage:
+                        percentage.toFixed(2),
+
+                    mark:
+                        mark.toFixed(2),
+
+                    lastDate:
+                        latest?.date || "",
+
+                    lastTimestamp:
+                        latest?.timestamp || ""
+
+                });
+
+            }
+        );
 
 
     students.sort(
-        (a,b) =>
-            a.studentId
-            .localeCompare(
-                b.studentId
-            )
+        (a, b) =>
+            String(a.studentId)
+                .localeCompare(
+                    String(b.studentId)
+                )
     );
 
 
@@ -1155,27 +1137,19 @@ function renderTable(){
             row.innerHTML = `
 
                 <td>
-                    ${student.safe(
-                        student.studentId
-                    )}
+                    ${safe(student.studentId)}
                 </td>
 
                 <td>
-                    ${student.safe(
-                        student.name
-                    )}
+                    ${safe(student.name)}
                 </td>
 
                 <td>
-                    ${student.safe(
-                        student.department
-                    )}
+                    ${safe(student.department)}
                 </td>
 
                 <td>
-                    ${student.safe(
-                        student.level
-                    )}
+                    ${safe(student.level)}
                 </td>
 
                 <td>
@@ -1199,9 +1173,7 @@ function renderTable(){
                 </td>
 
                 <td>
-                    ${student.safe(
-                        student.lastDate
-                    )}
+                    ${safe(student.lastDate)}
                 </td>
 
             `;
@@ -1215,9 +1187,9 @@ function renderTable(){
     );
 
 
-    if(
+    if (
         students.length === 0
-    ){
+    ) {
 
         table.innerHTML = `
 
@@ -1247,102 +1219,95 @@ function renderTable(){
 ===================================================== */
 
 document
-.getElementById(
-    "syncSheets"
-)
-.addEventListener(
-    "click",
-    async () => {
+    .getElementById(
+        "syncSheets"
+    )
+    .addEventListener(
+        "click",
+        async () => {
 
-        if(
-            APPS_SCRIPT_URL.includes(
-                "PASTE_"
-            )
-        ){
+            try {
 
-            showMessage(
-                "First add your Apps Script Web App URL."
-            );
-
-            return;
-
-        }
-
-
-        try{
-
-            const response =
-                await fetch(
-                    APPS_SCRIPT_URL,
-                    {
-
-                        method:"POST",
-
-                        headers:{
-                            "Content-Type":
-                                "text/plain;charset=utf-8"
-                        },
-
-                        body:
-                            JSON.stringify({
-
-                                settings,
-                                attendance,
-
-                                syncedAt:
-                                    new Date()
-                                    .toISOString()
-
-                            })
-
-                    }
+                showMessage(
+                    "Syncing Google Sheets..."
                 );
 
 
-            const result =
-                await response.json();
+                const result =
+                    await fetch(
+                        APPS_SCRIPT_URL,
+                        {
+
+                            method:
+                                "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "text/plain;charset=utf-8"
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    settings,
+                                    attendance,
+
+                                    syncedAt:
+                                        new Date()
+                                            .toISOString()
+
+                                })
+
+                        }
+                    );
 
 
-            if(
-                !result.success
-            ){
+                const data =
+                    await result.json();
 
-                throw new Error(
-                    result.message
+
+                if (
+                    !data.success
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        "Sync failed."
+                    );
+
+                }
+
+
+                showMessage(
+                    "Google Sheets sync completed."
+                );
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                showMessage(
+                    "Google Sheets sync failed."
                 );
 
             }
 
-
-            showMessage(
-                "Google Sheets sync completed."
-            );
-
-        }catch(error){
-
-            console.error(error);
-
-            showMessage(
-                "Google Sheets sync failed."
-            );
-
         }
-
-    }
-);
+    );
 
 
 /* =====================================================
    MESSAGE
 ===================================================== */
 
-function showMessage(text){
+function showMessage(text) {
 
     document
-    .getElementById(
-        "message"
-    )
-    .textContent =
+        .getElementById(
+            "message"
+        )
+        .textContent =
         text;
 
 }
@@ -1355,11 +1320,11 @@ function showMessage(text){
 setInterval(
     () => {
 
-        if(
+        if (
             auth.currentUser &&
             auth.currentUser.uid ===
             ADMIN_UID
-        ){
+        ) {
 
             updateDashboard();
 

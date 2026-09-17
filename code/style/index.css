@@ -1,6 +1,7 @@
-/*
-===== student portal css====
-*/
+/*=============================
+=======student portal css======
+===============================*/
+
 *{
     box-sizing:border-box;
     margin:0;
@@ -47,42 +48,27 @@ body{
 
 body::before{
     content:"";
-
     position:fixed;
-
     width:320px;
     height:320px;
-
     border-radius:50%;
-
-    background:
-        rgba(34,211,238,.06);
-
+    background:  rgba(34,211,238,.06);
     filter:blur(80px);
-
     top:-120px;
     left:-100px;
-
     pointer-events:none;
 }
 
 body::after{
     content:"";
-
     position:fixed;
-
     width:350px;
     height:350px;
-
     border-radius:50%;
-
     background: rgba(59,130,246,.06);
-
     filter:blur(90px);
-
     bottom:-150px;
     right:-100px;
-
     pointer-events:none;
 }
 
@@ -96,9 +82,7 @@ body::after{
 
 .card{
     position:relative;
-
     background: linear-gradient( 145deg, rgba(15,23,42,.88), rgba(2,6,23,.82)  );
-
     border: 1px solid var(--border);
     border-radius:30px;
     padding:30px;
@@ -127,245 +111,148 @@ body::after{
 .logo{
     width:72px;
     height:72px;
-
     margin:0 auto 16px;
-
     border-radius:22px;
-
     display:flex;
     align-items:center;
     justify-content:center;
-
-    background:
-        linear-gradient(
-            135deg,
-            #06b6d4,
-            #2563eb
-        );
-
-    box-shadow:
-        0 12px 35px rgba(6,182,212,.25);
-
+    background:  linear-gradient( 135deg,  #06b6d4,  #2563eb );
+    box-shadow: 0 12px 35px rgba(6,182,212,.25);
     font-size:29px;
     font-weight:900;
-
     letter-spacing:-1px;
-
     position:relative;
 }
 
 .logo::after{
     content:"";
-
     position:absolute;
-
     inset:1px;
-
     border-radius:21px;
-
-    border:
-        1px solid rgba(255,255,255,.22);
+    border:  1px solid rgba(255,255,255,.22);
 }
 
 .brand h1{
     font-size:26px;
     line-height:1.2;
-
     font-weight:800;
-
     letter-spacing:-.6px;
 }
 
 .subtitle{
     color:var(--muted);
-
     font-size:14px;
-
     margin-top:7px;
 }
 
 
 .course-box{
     margin:22px 0;
-
     padding:18px;
-
     border-radius:19px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(34,211,238,.07),
-            rgba(59,130,246,.06)
-        );
-
-    border:
-        1px solid rgba(34,211,238,.13);
+    background:   linear-gradient(  135deg,  rgba(34,211,238,.07),   rgba(59,130,246,.06) );
+    border:  1px solid rgba(34,211,238,.13);
 }
 
 .course-top{
     display:flex;
-
     align-items:center;
     justify-content:space-between;
-
     gap:10px;
-
     margin-bottom:14px;
 }
 
 .course-badge{
     display:inline-flex;
-
     align-items:center;
-
     padding:6px 10px;
-
     border-radius:999px;
-
-    background:
-        rgba(34,211,238,.1);
-
-    border:
-        1px solid rgba(34,211,238,.2);
-
+    background: rgba(34,211,238,.1);
+    border: 1px solid rgba(34,211,238,.2);
     color:#67e8f9;
-
     font-size:11px;
-
     font-weight:800;
-
     letter-spacing:.7px;
-
     text-transform:uppercase;
 }
 
 .course-code{
     font-size:12px;
-
     color:#64748b;
-
     font-weight:700;
 }
 
 .course-title{
     font-size:16px;
-
     line-height:1.5;
-
     font-weight:700;
-
     color:#f1f5f9;
-
     margin-bottom:14px;
 }
 
 .teacher{
     display:flex;
-
     align-items:center;
-
     gap:11px;
-
     padding-top:13px;
-
-    border-top:
-        1px solid rgba(148,163,184,.1);
+    border-top: 1px solid rgba(148,163,184,.1);
 }
 
 .teacher-icon{
     width:36px;
     height:36px;
-
     border-radius:11px;
-
     display:flex;
-
     align-items:center;
     justify-content:center;
-
-    background:
-        rgba(59,130,246,.12);
-
-    border:
-        1px solid rgba(59,130,246,.18);
-
+    background: rgba(59,130,246,.12);
+    border:  1px solid rgba(59,130,246,.18);
     font-size:16px;
 }
 
 .teacher-label{
     font-size:11px;
-
     color:#64748b;
-
     margin-bottom:2px;
-
     text-transform:uppercase;
-
     letter-spacing:.6px;
 }
 
 .teacher-name{
     font-size:14px;
-
     font-weight:700;
-
     color:#e2e8f0;
 }
 
 
 .status{
     display:flex;
-
     align-items:center;
     justify-content:center;
-
     gap:9px;
-
     min-height:49px;
-
     padding:12px 15px;
-
     border-radius:15px;
-
     text-align:center;
-
     margin-bottom:22px;
-
-    background:
-        rgba(30,41,59,.7);
-
-    border:
-        1px solid rgba(148,163,184,.1);
-
+    background:  rgba(30,41,59,.7);
+    border:  1px solid rgba(148,163,184,.1);
     font-size:13px;
-
     font-weight:750;
-
     transition:.25s ease;
 }
 
 .status.open{
-    background:
-        rgba(22,163,74,.09);
-
+    background:  rgba(22,163,74,.09);
     color:var(--green);
-
-    border-color:
-        rgba(74,222,128,.18);
-
-    box-shadow:
-        inset 0 0 20px rgba(74,222,128,.025);
+    border-color:   rgba(74,222,128,.18);
+    box-shadow: inset 0 0 20px rgba(74,222,128,.025);
 }
 
 .status.closed{
-    background:
-        rgba(220,38,38,.08);
-
+    background: rgba(220,38,38,.08);
     color:var(--red);
-
-    border-color:
-        rgba(248,113,113,.15);
+    border-color:  rgba(248,113,113,.15);
 }
 
 
@@ -379,55 +266,34 @@ body::after{
 
 label{
     display:flex;
-
     align-items:center;
-
     gap:6px;
-
     font-size:12px;
-
     font-weight:700;
-
     margin-bottom:8px;
-
     color:#cbd5e1;
-
     letter-spacing:.2px;
 }
 
 label::before{
     content:"";
-
     width:4px;
     height:4px;
-
     border-radius:50%;
-
-    background:var(--cyan);
-
+    background:var(--cyan); 
     opacity:.8;
 }
 
 input,
 select{
     width:100%;
-
     padding:14px 15px;
-
     border-radius:14px;
-
-    border:
-        1px solid #253247;
-
-    background:
-        rgba(2,6,23,.72);
-
+    border:  1px solid #253247;
+    background:  rgba(2,6,23,.72);
     color:white;
-
     outline:none;
-
     font-size:14px;
-
     transition:
         border-color .2s ease,
         box-shadow .2s ease,
@@ -448,39 +314,17 @@ select:hover{
 
 input:focus,
 select:focus{
-    border-color:
-        rgba(34,211,238,.65);
-
-    background:
-        rgba(2,6,23,.9);
-
-    box-shadow:
-        0 0 0 3px rgba(34,211,238,.07);
+    border-color: rgba(34,211,238,.65);
+    background:  rgba(2,6,23,.9);
+    box-shadow:0 0 0 3px rgba(34,211,238,.07);
 }
 
 select{
     cursor:pointer;
-
-    background-image:
-        linear-gradient(
-            45deg,
-            transparent 50%,
-            #64748b 50%
-        ),
-        linear-gradient(
-            135deg,
-            #64748b 50%,
-            transparent 50%
-        );
-
-    background-position:
-        calc(100% - 18px) 19px,
-        calc(100% - 13px) 19px;
-
-    background-size:
-        5px 5px,
-        5px 5px;
-
+    background-image:  linear-gradient( 45deg, transparent 50%,  #64748b 50% ), linear-gradient( 135deg,  #64748b 50%, transparent 50% );
+    
+    background-position: calc(100% - 18px) 19px, calc(100% - 13px) 19px;
+    background-size: 5px 5px,  5px 5px;
     background-repeat:no-repeat;
 }
 
@@ -492,47 +336,27 @@ select option{
 
 
 button{
-    width:100%;
-
-    padding:15px 18px;
-
-    margin-top:3px;
-
-    border:none;
-
-    border-radius:15px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #06b6d4,
-            #2563eb
-        );
-
-    color:white;
-
-    font-size:14px;
-
-    font-weight:800;
-
-    letter-spacing:.2px;
-
-    cursor:pointer;
-
-    box-shadow:
-        0 12px 28px rgba(37,99,235,.22);
-
-    transition:
-        transform .2s ease,
-        box-shadow .2s ease,
-        opacity .2s ease;
+        width:100%;
+        padding:15px 18px;
+        margin-top:3px;
+        border:none;
+        border-radius:15px;
+        background:  linear-gradient( 135deg, #06b6d4, #2563eb );
+        color:white;
+        font-size:14px;
+        font-weight:800;
+        letter-spacing:.2px;
+        cursor:pointer;
+        box-shadow:0 12px 28px rgba(37,99,235,.22);
+        transition:
+                transform .2s ease,
+                box-shadow .2s ease,
+                opacity .2s ease;
 }
 
 button:hover:not(:disabled){
     transform:translateY(-1px);
-
-    box-shadow:
-        0 16px 35px rgba(37,99,235,.3);
+    box-shadow:0 16px 35px rgba(37,99,235,.3);
 }
 
 button:active:not(:disabled){
@@ -572,8 +396,7 @@ button:disabled{
 
     padding-top:17px;
 
-    border-top:
-        1px solid rgba(148,163,184,.08);
+    border-top: 1px solid rgba(148,163,184,.08);
 
     text-align:center;
 

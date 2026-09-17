@@ -1,11 +1,16 @@
-/*
-===== student portal js====
-*/
+/* ==================================================
+   Developed by: MH2 HRIDOY
+   Contact: 01962-388 570
+   Email: mhhridoy7907@gmail.com
+   GitHub: @mhhridoy7907
+   ================================================== */
+
+
 import {
     initializeApp
 }
 from
-"htt***********p.js";
+"https*****************************p.js";
 
 
 import {
@@ -15,28 +20,23 @@ import {
     set
 }
 from
-"https://www.gst***********base.js";
+"http****************************ase.js";
 
 
-/* =====FIREBASE CONFIG==================== */
+/* =====================================================
+   FIREBASE CONFIG
+===================================================== */
 
 const firebaseConfig = {
 
-    apiKey: "AI***********eAAIk",
-
-    authDomain: "ge***********pp.com",
-
-    databaseURL: "htt***********e.app",
-
-    projectId: "g***********07",
-
-    storageBucket:"ge***********e.app",
-
-    messagingSenderId:  "72***********3",
-
-    appId: "1:7***********b8",
-
-    measurementId: "G-***********90"
+    apiKey: "AIza****************************Ik",
+    authDomain: "g****************************om",
+    databaseURL: "ht****************************tabase.app",
+    projectId: "g*******07",
+    storageBucket: "ge****************************pp",
+    messagingSenderId: "7****************************3",
+    appId: "1:****************************b8",
+    measurementId: "G-H****************************T90"
 
 };
 
@@ -45,12 +45,12 @@ const app =
     initializeApp(
         firebaseConfig
     );
+const db = getDatabase(app);
 
 
-const db =
-    getDatabase(app);
-
-
+/* =====================================================
+   ELEMENTS
+===================================================== */
 
 const form =
     document.getElementById(
@@ -76,23 +76,19 @@ const message =
     );
 
 
-
 let settings = null;
 
 
 
-function getBDDate(){
+function getBDDate() {
 
     return new Intl.DateTimeFormat(
         "en-CA",
         {
-            timeZone:"Asia/Dhaka",
-
-            year:"numeric",
-
-            month:"2-digit",
-
-            day:"2-digit"
+            timeZone: "Asia/Dhaka",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit"
         }
     ).format(
         new Date()
@@ -102,12 +98,10 @@ function getBDDate(){
 
 
 
-function isActive(){
+function isActive() {
 
-    if(!settings){
-
+    if (!settings) {
         return false;
-
     }
 
 
@@ -124,6 +118,7 @@ function isActive(){
 }
 
 
+
 onValue(
 
     ref(
@@ -136,7 +131,6 @@ onValue(
         settings =
             snapshot.val() || {};
 
-
         updateStatus();
 
     },
@@ -144,7 +138,7 @@ onValue(
     error => {
 
         console.error(
-            "Settings error:",
+            "Firebase settings error:",
             error
         );
 
@@ -166,9 +160,9 @@ onValue(
 
 
 
-function updateStatus(){
+function updateStatus() {
 
-    if(!settings){
+    if (!settings) {
 
         status.textContent =
             "⏳ Loading class...";
@@ -184,7 +178,7 @@ function updateStatus(){
     }
 
 
-    if(!isActive()){
+    if (!isActive()) {
 
         status.textContent =
             "🔴 Class is currently CLOSED";
@@ -226,21 +220,16 @@ function updateStatus(){
 
 
 setInterval(
-
     updateStatus,
-
     1000
-
 );
 
 
 
-function formatRemaining(ms){
+function formatRemaining(ms) {
 
-    if(ms <= 0){
-
+    if (ms <= 0) {
         return "Expired";
-
     }
 
 
@@ -267,13 +256,12 @@ function formatRemaining(ms){
 
 
     return (
-
-        hours + "h " +
-
-        minutes + "m " +
-
-        seconds + "s remaining"
-
+        hours +
+        "h " +
+        minutes +
+        "m " +
+        seconds +
+        "s remaining"
     );
 
 }
@@ -283,27 +271,31 @@ function formatRemaining(ms){
 function showMessage(
     text,
     type = "error"
-){
+) {
 
     message.textContent =
         text;
 
 
-    if(type === "success"){
+    if (
+        type === "success"
+    ) {
 
         message.style.color =
             "#4ade80";
 
     }
 
-    else if(type === "info"){
+    else if (
+        type === "info"
+    ) {
 
         message.style.color =
             "#22d3ee";
 
     }
 
-    else{
+    else {
 
         message.style.color =
             "#f87171";
@@ -315,16 +307,13 @@ function showMessage(
 
 
 form.addEventListener(
-
     "submit",
-
     async event => {
 
         event.preventDefault();
 
 
-
-        if(!isActive()){
+        if (!isActive()) {
 
             showMessage(
                 "Class is currently closed."
@@ -338,107 +327,65 @@ form.addEventListener(
 
         const studentId =
             document
-            .getElementById(
-                "studentId"
-            )
-            .value
-            .trim();
+                .getElementById( "studentId" )
+                .value
+                .trim();
 
 
-        const name =
-            document
-            .getElementById(
-                "studentName"
-            )
-            .value
-            .trim();
+        const name = document .getElementById( "studentName" )
+                .value
+                .trim();
 
 
-        const department =
-            document
-            .getElementById(
-                "department"
-            )
-            .value;
+        const department = document .getElementById( "department"  )
+                .value;
 
 
-        const level =
-            document
-            .getElementById(
-                "level"
-            )
-            .value;
+        const level = document  .getElementById(   "level"  )
+                .value;
 
 
-        const classCode =
-            document
-            .getElementById(
-                "classCode"
-            )
-            .value
-            .trim();
+        const classCode = document  .getElementById(  "classCode" )
+                .value
+                .trim();
 
 
 
-        if(
-            !/^\d{16}$/.test(
-                studentId
-            )
-        ){
+        if ( !/^\d{16}$/.test( studentId ) )
+        {
+    showMessage( "Student ID must be exactly 16 digits." );
+          return;
+     }
 
-            showMessage(
-                "Student ID must be exactly 16 digits."
-            );
+
+        if ( name.length < 2 )
+        {
+     showMessage( "Please enter a valid name." );
+    return;
+        }
+
+
+        if ( !department ) {
+
+            showMessage( "Select department." );
 
             return;
 
         }
 
 
-        if(
-            name.length < 2
-        ){
+        if (  !level ) {
 
-            showMessage(
-                "Please enter a valid name."
-            );
+            showMessage(  "Select level."  );
 
             return;
 
         }
 
 
-        if(!department){
+        if (  !/^\d{4}$/.test(  classCode )) {
 
-            showMessage(
-                "Select department."
-            );
-
-            return;
-
-        }
-
-
-        if(!level){
-
-            showMessage(
-                "Select level."
-            );
-
-            return;
-
-        }
-
-
-        if(
-            !/^\d{4}$/.test(
-                classCode
-            )
-        ){
-
-            showMessage(
-                "Class code must be exactly 4 digits."
-            );
+            showMessage(  "Class code must be exactly 4 digits." );
 
             return;
 
@@ -446,60 +393,34 @@ form.addEventListener(
 
 
 
-        if(
-            String(
-                settings.classCode
-            ) !==
-            classCode
-        ){
+        if ( String(    settings.classCode ) !== classCode ) {
 
-            showMessage(
-                "Incorrect class code."
-            );
+            showMessage("Incorrect class code."   );
 
             return;
 
         }
 
 
-
-        const date =
-            getBDDate();
-
+  
+        const date =  getBDDate();
 
 
         const attendanceRef =
-            ref(
-
-                db,
-
-                "attendance/" +
-                studentId +
-                "/" +
-                date
-
-            );
+            ref( db, "attendance/" +  studentId +  "/" +  date  );
 
 
 
-        submitBtn.disabled =
-            true;
+        submitBtn.disabled = true;
 
-        submitBtn.textContent =
-            "Checking...";
+        submitBtn.textContent = "Submitting...";
 
 
-        showMessage(
-            "Checking today's attendance...",
-            "info"
-        );
+        showMessage(  "Submitting attendance...", "info" );
 
 
-        try{
-              await set(
-
+        try { await set(
                 attendanceRef,
-
                 {
 
                     studentId:
@@ -527,26 +448,19 @@ form.addEventListener(
                         Date.now()
 
                 }
-
             );
 
 
-
             showMessage(
-
                 "✓ Attendance submitted successfully.",
-
                 "success"
-
             );
 
 
             form.reset();
 
 
-        }
-
-        catch(error){
+        } catch (error) {
 
             console.error(
                 "Attendance error:",
@@ -554,43 +468,36 @@ form.addEventListener(
             );
 
 
-
-            if( error.code === "PERMISSION_DENIED" || error.code === "permission_denied" ){
+            if (
+                error.code ===
+                "PERMISSION_DENIED" ||
+                error.code ===
+                "permission_denied"
+            ) {
 
                 showMessage(
-
-                    "✓ Already Present Today",
-
-                    "success"
-
+                    "Attendance was not accepted. You may already be present today or the class is no longer valid."
                 );
 
             }
 
-            else{
+            else {
 
                 showMessage(
-
-                    "Attendance submission failed. Please try again.",
-
-                    "error"
-
+                    "Attendance submission failed. Please try again."
                 );
 
             }
 
         }
 
-        finally{
+        finally {
 
-            submitBtn.disabled =
-                !isActive();
+            submitBtn.disabled =  !isActive();
 
-            submitBtn.textContent =
-                "Submit Attendance";
+            submitBtn.textContent =  "Submit Attendance";
 
         }
 
     }
-
 );

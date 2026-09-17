@@ -1,16 +1,23 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Academic Attendance Admin</title>
-<link rel="stylesheet" href="style/admin.css">
 
+<link rel="stylesheet" href="style/admin.css">
 
 </head>
 
 <body>
+
+
+<!-- =====================================================
+     LOGIN SCREEN
+===================================================== -->
 
 <div id="loginScreen">
 
@@ -49,21 +56,35 @@
                 Password
             </label>
 
-<input id="loginPassword"  type="password"autocomplete="current-password" placeholder="Admin password">
+            <input
+                id="loginPassword"
+                type="password"
+                autocomplete="current-password"
+                placeholder="Admin password"
+            >
 
         </div>
 
 
- <button id="loginButton" class="loginButton" >
+        <button
+            id="loginButton"
+            class="loginButton"
+        >
             Login to Admin
- </button>
+        </button>
 
 
-<div id="loginError" class="loginError"></div>
-<div class="loginFooter">
+        <div
+            id="loginError"
+            class="loginError"
+        ></div>
 
-    Protected by Firebase Authentication
- </div>
+
+        <div class="loginFooter">
+
+            Protected by Firebase Authentication
+
+        </div>
 
     </div>
 
@@ -71,7 +92,14 @@
 
 
 
-<div id="adminApp">
+<!-- =====================================================
+     ADMIN APP
+===================================================== -->
+
+<div
+    id="adminApp"
+>
+
 <div class="container">
 
 
@@ -92,11 +120,17 @@
 
     <div class="headerActions">
 
- <div id="liveStatus"   class="live closed">
+        <div
+            id="liveStatus"
+            class="live closed"
+        >
             ● CLASS CLOSED
         </div>
 
-  <button  id="logoutButton" class="logoutBtn" >
+        <button
+            id="logoutButton"
+            class="logoutBtn"
+        >
             Logout
         </button>
 
@@ -104,6 +138,11 @@
 
 </header>
 
+
+
+<!-- =================================================
+     STATS
+================================================= -->
 
 <div class="grid">
 
@@ -162,6 +201,10 @@
 
 
 
+<!-- =================================================
+     CLASS CONTROL
+================================================= -->
+
 <div class="card">
 
     <h2>
@@ -171,45 +214,84 @@
 
     <div class="controls">
 
-<input id="classCode"  type="text"  maxlength="4"  inputmode="numeric"  placeholder="4 digit class code" >
-<input id="totalClasses" type="number" min="1" max="1000" placeholder="Total class">
+        <input
+            id="classCode"
+            type="text"
+            maxlength="4"
+            inputmode="numeric"
+            placeholder="4 digit class code"
+        >
 
 
-        <button id="saveSettings" >
+        <input
+            id="totalClasses"
+            type="number"
+            min="1"
+            max="1000"
+            placeholder="Total class"
+        >
+
+
+        <button
+            id="saveSettings"
+        >
             Save Settings
         </button>
 
 
-        <button id="startClass"  class="green">
+        <button
+            id="startClass"
+            class="green"
+        >
             Start Present
         </button>
 
     </div>
 
 
-    <div class="controls" style="margin-top:12px;" >
+    <div
+        class="controls"
+        style="margin-top:12px;"
+    >
 
-        <button  id="offClass" class="red">
+        <button
+            id="offClass"
+            class="red"
+        >
             Class OFF
         </button>
 
 
-        <button id="syncSheets" class="gray">
+        <button
+            id="syncSheets"
+            class="gray"
+        >
             Sync Google Sheets
         </button>
 
     </div>
 
 
-    <div id="classInfo" class="info">
+    <div
+        id="classInfo"
+        class="info"
+    >
         Loading...
     </div>
 
 
-    <div id="message" class="message"></div>
+    <div
+        id="message"
+        class="message"
+    ></div>
 
 </div>
 
+
+
+<!-- =================================================
+     FILTER
+================================================= -->
 
 <div class="card">
 
@@ -246,6 +328,9 @@
                 Fashion Design
             </option>
 
+            <option value="BBA">
+                 BBA
+            </option>
         </select>
 
 
@@ -353,7 +438,7 @@
 
 
 
-<script type="module" src="script/admin.js"> </script>
+<script type="module" src="script/admin.js"></script>
 
 </body>
 </html>
