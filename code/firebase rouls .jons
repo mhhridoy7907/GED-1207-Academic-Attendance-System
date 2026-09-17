@@ -1,0 +1,56 @@
+{
+  "rules": {
+
+    ".read": false,
+    ".write": false,
+
+    "settings": {
+
+      ".read": true,
+
+      ".write": "auth != null && auth.uid === 'uvlRMvEMSFdRMagFxaGA7ADsIrj1'",
+
+      "classActive": {
+        ".validate": "newData.isBoolean()"
+      },
+
+      "classCode": {
+        ".validate": "newData.isString() && newData.val().matches(/^\\d{4}$/)"
+      },
+
+      "totalClasses": {
+        ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 1000"
+      },
+
+      "presentStart": {
+        ".validate": "newData.isNumber()"
+      },
+
+      "autoOffAt": {
+        ".validate": "newData.isNumber()"
+      },
+
+      "$other": {
+        ".validate": false
+      }
+    },
+
+    "attendance": {
+
+      ".read": "auth != null && auth.uid === 'uvlRMvEMSFdRMagFxaGA7ADsIrj1'",
+
+      "$studentId": {
+
+        "$date": {
+
+          ".read": "auth != null && auth.uid === 'uvlRMvEMSFdRMagFxaGA7ADsIrj1'",
+
+          ".write": "!data.exists() && root.child('settings/classActive').val() === true && root.child('settings/autoOffAt').val() > now && newData.child('studentId').val() === $studentId && newData.child('date').val() === $date && newData.child('present').val() === true && newData.child('classCode').val() === root.child('settings/classCode').val()",
+
+          ".validate": "newData.hasChildren(['studentId','name','department','level','classCode','present','date','timestamp']) && newData.child('studentId').isString() && newData.child('name').isString() && newData.child('department').isString() && newData.child('level').isString() && newData.child('classCode').isString() && newData.child('present').isBoolean() && newData.child('present').val() === true && newData.child('date').isString() && newData.child('timestamp').isNumber()"
+
+        }
+      }
+    }
+  }
+}
