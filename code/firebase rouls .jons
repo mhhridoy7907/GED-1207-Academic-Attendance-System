@@ -1,14 +1,12 @@
 {
   "rules": {
-
     ".read": false,
     ".write": false,
 
     "settings": {
-
       ".read": true,
 
-      ".write": "auth != null && auth.uid === 'uvlRMvEMSFdRMagFxaGA7ADsIrj1'",
+      ".write": "auth != null && auth.uid === 'aekQ82U2sjgaSUD9WJ1nk9LccXt2'",
 
       "classActive": {
         ".validate": "newData.isBoolean()"
@@ -30,25 +28,36 @@
         ".validate": "newData.isNumber()"
       },
 
+      "appsScriptUrl": {
+        ".validate": "!newData.exists() || (newData.isString() && newData.val().matches(/^https:\\/\\/(script\\.google\\.com|[a-zA-Z0-9.-]+\\.googleusercontent\\.com)\\/.+/))"
+      },
+
       "$other": {
         ".validate": false
       }
     },
 
-    "attendance": {
+    "studentIndex": {
+      "$studentKey": {
+        ".read": true,
 
-      ".read": "auth != null && auth.uid === 'uvlRMvEMSFdRMagFxaGA7ADsIrj1'",
+        ".write": "!data.exists() && newData.isString() && newData.val().matches(/^\\d{16}$/)",
+
+        ".validate": "newData.isString() && newData.val().matches(/^\\d{16}$/)"
+      }
+    },
+
+    "attendance": {
+      ".read": true,
 
       "$studentId": {
-
         "$date": {
 
-          ".read": "auth != null && auth.uid === 'uvlRMvEMSFdRMagFxaGA7ADsIrj1'",
+          ".read": true,
 
           ".write": "!data.exists() && root.child('settings/classActive').val() === true && root.child('settings/autoOffAt').val() > now && newData.child('studentId').val() === $studentId && newData.child('date').val() === $date && newData.child('present').val() === true && newData.child('classCode').val() === root.child('settings/classCode').val()",
 
-          ".validate": "newData.hasChildren(['studentId','name','department','level','classCode','present','date','timestamp']) && newData.child('studentId').isString() && newData.child('name').isString() && newData.child('department').isString() && newData.child('level').isString() && newData.child('classCode').isString() && newData.child('present').isBoolean() && newData.child('present').val() === true && newData.child('date').isString() && newData.child('timestamp').isNumber()"
-
+          ".validate": "newData.hasChildren(['studentId','name','department','level','classCode','present','date','timestamp']) && newData.child('studentId').isString() && newData.child('studentId').val().matches(/^\\d{16}$/) && newData.child('name').isString() && newData.child('name').val().length >= 2 && newData.child('department').isString() && (newData.child('department').val() === 'CSE' || newData.child('department').val() === 'EEE' || newData.child('department').val() === 'ENGLISH' || newData.child('department').val() === 'BDPH' || newData.child('department').val() === 'FASHION DESIGN' || newData.child('department').val() === 'BBA') && newData.child('level').isString() && (newData.child('level').val() === '1.1' || newData.child('level').val() === '1.2' || newData.child('level').val() === '2.1' || newData.child('level').val() === '2.2' || newData.child('level').val() === '3.1' || newData.child('level').val() === '3.2' || newData.child('level').val() === '4.1' || newData.child('level').val() === '4.2') && newData.child('classCode').isString() && newData.child('classCode').val().matches(/^\\d{4}$/) && newData.child('present').isBoolean() && newData.child('present').val() === true && newData.child('date').isString() && newData.child('date').val() === $date && newData.child('timestamp').isNumber()"
         }
       }
     }
