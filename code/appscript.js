@@ -46,11 +46,7 @@ function doPost(e) {
 
   try {
 
-    if (
-      !e ||
-      !e.postData ||
-      !e.postData.contents
-    ) {
+    if ( !e || !e.postData || !e.postData.contents ) {
 
       return response({
         success: false,
@@ -79,10 +75,8 @@ function doPost(e) {
       );
 
 
-    if (
-      !Number.isInteger(total) ||
-      total < 1
-    ) {
+    if ( !Number.isInteger(total) || total < 1 )
+     {
 
       return response({
         success: false,
@@ -92,10 +86,7 @@ function doPost(e) {
     }
 
 
-    const spreadsheet =
-      SpreadsheetApp.getActiveSpreadsheet();
-
-
+    const spreadsheet =  SpreadsheetApp.getActiveSpreadsheet();
     const students = {};
 
 
@@ -110,15 +101,10 @@ function doPost(e) {
           }
 
 
-          const records =
-            Object.entries(dates)
-              .map(
-                ([date, record]) => {
+          const records = Object.entries(dates)
+              .map( ([date, record]) => {
 
-                  if (
-                    !record ||
-                    record.present !== true
-                  ) {
+                  if ( !record || record.present !== true) {
                     return null;
                   }
 
@@ -133,40 +119,24 @@ function doPost(e) {
               .filter(Boolean);
 
 
-          if (
-            records.length === 0
-          ) {
+          if ( records.length === 0)
+           {
             return;
           }
 
 
-          records.sort(
-            (a, b) =>
-              String(b.date)
-                .localeCompare(
-                  String(a.date)
-                )
-          );
+          records.sort( (a, b) => String(b.date) .localeCompare(String(a.date) ) );
 
 
-          const latest =
-            records[0];
+          const latest = records[0];
 
 
           
 
-          const present =
-            Math.min(
-              records.length,
-              total
-            );
+          const present = Math.min(records.length, total );
 
 
-          const absent =
-            Math.max(
-              0,
-              total - present
-            );
+          const absent = Math.max(  0, total - present );
 
 
           const percentage =
