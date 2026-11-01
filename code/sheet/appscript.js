@@ -1,4 +1,3 @@
-
 const DEPARTMENTS = [
   "CSE",
   "EEE",
@@ -6,6 +5,17 @@ const DEPARTMENTS = [
   "BDPH",
   "FASHION DESIGN",
   "BBA"
+];
+
+const LEVELS = [
+  "1.1",
+  "1.2",
+  "2.1",
+  "2.2",
+  "3.1",
+  "3.2",
+  "4.1",
+  "4.2"
 ];
 
 const HEADERS = [
@@ -25,6 +35,8 @@ const HEADERS = [
 const PRESENT_COLOR = "#d9ead3";
 const ABSENT_COLOR = "#f4cccc";
 const HEADER_COLOR = "#163832";
+const HEADER_TEXT_COLOR = "#ffffff";
+const ALTERNATE_COLOR = "#f3f7f5";
 
 
 function doGet() {
@@ -67,13 +79,16 @@ function doPost(e) {
     const students = {};
     const dateSet = new Set();
 
-    // Collect all attendance dates and students
+    // Collect attendance data
+
     Object.entries(attendance).forEach(([studentId, dates]) => {
+
       if (!dates || typeof dates !== "object") return;
 
       const records = [];
 
       Object.entries(dates).forEach(([date, record]) => {
+
         if (!record) return;
 
         dateSet.add(date);
@@ -84,6 +99,7 @@ function doPost(e) {
             ...record
           });
         }
+
       });
 
       if (records.length === 0) return;
@@ -110,13 +126,17 @@ function doPost(e) {
         lastDate: latest.date || "",
         lastTimestamp: latest.timestamp || ""
       };
+
     });
 
-    // Sort dates chronologically
+    // Sort attendance dates
+
     const dates = Array.from(dateSet).sort();
 
-    // Update department sheets
+    // Update Department Sheets
+
     DEPARTMENTS.forEach(department => {
+
       const sheet = getSheet(spreadsheet, department);
 
       sheet.clear();
@@ -126,23 +146,48 @@ function doPost(e) {
       sheet.getRange(1, 1, 1, headers.length)
         .setValues([headers]);
 
+      // Filter department students
+
       const departmentStudents = Object.values(students)
         .filter(student => student.department === department)
-        .sort((a, b) =>
-          String(a.studentId).localeCompare(String(b.studentId))
-        );
+
+        // LEVEL FIRST, STUDENT ID SECOND
+
+        .sort((a, b) => {
+
+          const levelA = LEVELS.indexOf(a.level);
+          const levelB = LEVELS.indexOf(b.level);
+
+          const orderA = levelA === -1 ? 999 : levelA;
+          const orderB = levelB === -1 ? 999 : levelB;
+
+          if (orderA !== orderB) {
+            return orderA - orderB;
+          }
+
+          const idA = BigInt(a.studentId);
+          const idB = BigInt(b.studentId);
+
+          return idA < idB ? -1 : idA > idB ? 1 : 0;
+
+        });
 
       const rows = [];
       const backgrounds = [];
       const fontColors = [];
 
+      // Generate student rows
+
       departmentStudents.forEach(student => {
+
         const studentDates = attendance[student.studentId] || {};
 
         const statuses = dates.map(date => {
+
           const record = studentDates[date];
 
           return record && record.present === true ? "P" : "A";
+
         });
 
         rows.push([
@@ -160,6 +205,8 @@ function doPost(e) {
           ...statuses
         ]);
 
+        // Attendance colors
+
         backgrounds.push(
           statuses.map(status =>
             status === "P" ? PRESENT_COLOR : ABSENT_COLOR
@@ -171,10 +218,13 @@ function doPost(e) {
             status === "P" ? "#38761d" : "#990000"
           )
         );
+
       });
 
       // Write student data
+
       if (rows.length > 0) {
+
         sheet.getRange(
           2,
           1,
@@ -182,8 +232,27 @@ function doPost(e) {
           headers.length
         ).setValues(rows);
 
-        // Format attendance cells
+        // Alternating row colors
+
+        const mainRange = sheet.getRange(
+          2,
+          1,
+          rows.length,
+          HEADERS.length
+        );
+
+        const mainBackgrounds = rows.map((row, index) =>
+          Array(HEADERS.length).fill(
+            index % 2 === 0 ? "#ffffff" : ALTERNATE_COLOR
+          )
+        );
+
+        mainRange.setBackgrounds(mainBackgrounds);
+
+        // Attendance formatting
+
         if (dates.length > 0) {
+
           const attendanceRange = sheet.getRange(
             2,
             HEADERS.length + 1,
@@ -196,42 +265,108 @@ function doPost(e) {
             .setFontColors(fontColors)
             .setFontWeight("bold")
             .setHorizontalAlignment("center");
+
         }
+
+        // Summary number formatting
+
+        sheet.getRange(2, 5, rows.length, 5)
+          .setHorizontalAlignment("center");
+
+        sheet.getRange(2, 8, rows.length, 2)
+          .setNumberFormat("0.00");
+
       }
 
-      // Header formatting
-      sheet.getRange(1, 1, 1, headers.length)
+      // Header design
+
+      const headerRange = sheet.getRange(
+        1,
+        1,
+        1,
+        headers.length
+      );
+
+      headerRange
         .setBackground(HEADER_COLOR)
-        .setFontColor("#ffffff")
+        .setFontColor(HEADER_TEXT_COLOR)
         .setFontWeight("bold")
-        .setHorizontalAlignment("center");
+        .setHorizontalAlignment("center")
+        .setVerticalAlignment("middle")
+        .setWrap(true);
+
+      sheet.setRowHeight(1, 40);
+
+      // Sheet layout
 
       sheet.setFrozenRows(1);
       sheet.setFrozenColumns(3);
 
-      sheet.autoResizeColumns(1, headers.length);
+      sheet.autoResizeColumns(1, HEADERS.length);
 
-      // Attendance date columns width
+      // Main column widths
+
+      sheet.setColumnWidth(1, 165);
+      sheet.setColumnWidth(2, 180);
+      sheet.setColumnWidth(3, 140);
+      sheet.setColumnWidth(4, 85);
+      sheet.setColumnWidths(5, 5, 105);
+      sheet.setColumnWidth(10, 130);
+      sheet.setColumnWidth(11, 170);
+
+      // Attendance date columns
+
       if (dates.length > 0) {
+
         sheet.setColumnWidths(
           HEADERS.length + 1,
           dates.length,
           75
         );
+
       }
 
-      // Center attendance summary values
+      // Data alignment
+
       if (rows.length > 0) {
+
         sheet.getRange(
           2,
-          5,
+          1,
           rows.length,
-          5
+          headers.length
+        ).setVerticalAlignment("middle");
+
+        sheet.getRange(
+          2,
+          4,
+          rows.length,
+          7
         ).setHorizontalAlignment("center");
+
       }
+
+      // Filter
+
+      if (sheet.getFilter()) {
+        sheet.getFilter().remove();
+      }
+
+      sheet.getRange(
+        1,
+        1,
+        Math.max(rows.length + 1, 1),
+        headers.length
+      ).createFilter();
+
+      // Tab color
+
+      sheet.setTabColor(HEADER_COLOR);
+
     });
 
-    // Update SUMMARY sheet
+    // UPDATE SUMMARY SHEET
+
     const summary = getSheet(spreadsheet, "SUMMARY");
 
     summary.clear();
@@ -247,6 +382,7 @@ function doPost(e) {
       .setValues([summaryHeaders]);
 
     const summaryRows = DEPARTMENTS.map(department => {
+
       const count = Object.values(students)
         .filter(student => student.department === department)
         .length;
@@ -257,6 +393,7 @@ function doPost(e) {
         total,
         new Date()
       ];
+
     });
 
     summary.getRange(
@@ -266,23 +403,49 @@ function doPost(e) {
       4
     ).setValues(summaryRows);
 
+    // Summary header design
+
     summary.getRange(1, 1, 1, 4)
       .setBackground(HEADER_COLOR)
-      .setFontColor("#ffffff")
-      .setFontWeight("bold");
+      .setFontColor(HEADER_TEXT_COLOR)
+      .setFontWeight("bold")
+      .setHorizontalAlignment("center")
+      .setVerticalAlignment("middle")
+      .setWrap(true);
+
+    // Summary body design
+
+    summary.getRange(2, 1, summaryRows.length, 4)
+      .setVerticalAlignment("middle");
+
+    summary.getRange(2, 2, summaryRows.length, 2)
+      .setHorizontalAlignment("center");
+
+    summary.getRange(2, 4, summaryRows.length, 1)
+      .setNumberFormat("dd MMM yyyy, hh:mm:ss");
+
+    summary.setRowHeight(1, 40);
 
     summary.setFrozenRows(1);
-    summary.autoResizeColumns(1, 4);
+
+    summary.setColumnWidth(1, 180);
+    summary.setColumnWidth(2, 110);
+    summary.setColumnWidth(3, 120);
+    summary.setColumnWidth(4, 200);
+
+    summary.setTabColor("#0b8043");
 
     return response({
       success: true,
       message: "Google Sheets updated successfully.",
       students: Object.keys(students).length,
       dates: dates.length,
+      sorting: "Level ASC, Student ID ASC",
       syncedAt: new Date().toISOString()
     });
 
   } catch (error) {
+
     console.error(error);
 
     return response({
@@ -291,15 +454,20 @@ function doPost(e) {
     });
 
   } finally {
+
     if (lock.hasLock()) {
       lock.releaseLock();
     }
+
   }
+
 }
 
 
-// Get or create sheet
+// GET OR CREATE SHEET
+
 function getSheet(spreadsheet, name) {
+
   let sheet = spreadsheet.getSheetByName(name);
 
   if (!sheet) {
@@ -307,18 +475,25 @@ function getSheet(spreadsheet, name) {
   }
 
   return sheet;
+
 }
 
 
-// Round numbers
+// ROUND NUMBERS
+
 function round(value) {
+
   return Math.round(Number(value) * 100) / 100;
+
 }
 
 
-// JSON response
+// JSON RESPONSE
+
 function response(data) {
+
   return ContentService
     .createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
+
 }
