@@ -1,3 +1,4 @@
+
 const DEPARTMENTS = [
   "CSE",
   "EEE",
@@ -8,14 +9,10 @@ const DEPARTMENTS = [
 ];
 
 const LEVELS = [
-  "1.1",
-  "1.2",
-  "2.1",
-  "2.2",
-  "3.1",
-  "3.2",
-  "4.1",
-  "4.2"
+  "1.1", "1.2",
+  "2.1", "2.2",
+  "3.1", "3.2",
+  "4.1", "4.2"
 ];
 
 const HEADERS = [
@@ -28,8 +25,7 @@ const HEADERS = [
   "Absent",
   "Attendance %",
   "Mark / 10",
-  "Last Present Date",
-  "Last Timestamp"
+  "Last Present Date"
 ];
 
 const PRESENT_COLOR = "#d9ead3";
@@ -37,6 +33,7 @@ const ABSENT_COLOR = "#f4cccc";
 const HEADER_COLOR = "#163832";
 const HEADER_TEXT_COLOR = "#ffffff";
 const ALTERNATE_COLOR = "#f3f7f5";
+const LEVEL_COLOR = "#dce9e4";
 
 
 function doGet() {
@@ -48,9 +45,11 @@ function doGet() {
 
 
 function doPost(e) {
+
   const lock = LockService.getScriptLock();
 
   try {
+
     lock.waitLock(30000);
 
     if (!e || !e.postData || !e.postData.contents) {
@@ -79,7 +78,7 @@ function doPost(e) {
     const students = {};
     const dateSet = new Set();
 
-    // Collect attendance data
+    // COLLECT ATTENDANCE
 
     Object.entries(attendance).forEach(([studentId, dates]) => {
 
@@ -123,17 +122,14 @@ function doPost(e) {
         absent: absent,
         percentage: round((present / total) * 100),
         mark: round((present / total) * 10),
-        lastDate: latest.date || "",
-        lastTimestamp: latest.timestamp || ""
+        lastDate: latest.date || ""
       };
 
     });
 
-    // Sort attendance dates
-
     const dates = Array.from(dateSet).sort();
 
-    // Update Department Sheets
+    // DEPARTMENT SHEETS
 
     DEPARTMENTS.forEach(department => {
 
@@ -142,17 +138,15 @@ function doPost(e) {
       sheet.clear();
 
       const headers = [...HEADERS, ...dates];
+      const totalColumns = headers.length;
 
-      sheet.getRange(1, 1, 1, headers.length)
+      sheet.getRange(1, 1, 1, totalColumns)
         .setValues([headers]);
 
-      // Filter department students
+      // SORT BY LEVEL AND STUDENT ID
 
       const departmentStudents = Object.values(students)
         .filter(student => student.department === department)
-
-        // LEVEL FIRST, STUDENT ID SECOND
-
         .sort((a, b) => {
 
           const levelA = LEVELS.indexOf(a.level);
@@ -172,13 +166,43 @@ function doPost(e) {
 
         });
 
-      const rows = [];
-      const backgrounds = [];
-      const fontColors = [];
+      const outputRows = [];
 
-      // Generate student rows
+      const rowTypes = [];
+
+      let currentLevel = null;
+
+      // GENERATE LEVEL SECTIONS
 
       departmentStudents.forEach(student => {
+
+        if (student.level !== currentLevel) {
+
+          // GAP ROW BETWEEN LEVELS
+
+          if (currentLevel !== null) {
+
+            outputRows.push(
+              Array(totalColumns).fill("")
+            );
+
+            rowTypes.push("GAP");
+
+          }
+
+          // LEVEL HEADER ROW
+
+          const levelHeader = Array(totalColumns).fill("");
+
+          levelHeader[0] = "LEVEL " + student.level;
+
+          outputRows.push(levelHeader);
+
+          rowTypes.push("LEVEL");
+
+          currentLevel = student.level;
+
+        }
 
         const studentDates = attendance[student.studentId] || {};
 
@@ -190,7 +214,7 @@ function doPost(e) {
 
         });
 
-        rows.push([
+        outputRows.push([
           student.studentId,
           student.name,
           student.department,
@@ -201,93 +225,128 @@ function doPost(e) {
           student.percentage,
           student.mark,
           student.lastDate,
-          student.lastTimestamp,
           ...statuses
         ]);
 
-        // Attendance colors
-
-        backgrounds.push(
-          statuses.map(status =>
-            status === "P" ? PRESENT_COLOR : ABSENT_COLOR
-          )
-        );
-
-        fontColors.push(
-          statuses.map(status =>
-            status === "P" ? "#38761d" : "#990000"
-          )
-        );
+        rowTypes.push("STUDENT");
 
       });
 
-      // Write student data
+      // WRITE DATA
 
-      if (rows.length > 0) {
+      if (outputRows.length > 0) {
 
         sheet.getRange(
           2,
           1,
-          rows.length,
-          headers.length
-        ).setValues(rows);
+          outputRows.length,
+          totalColumns
+        ).setValues(outputRows);
 
-        // Alternating row colors
+        outputRows.forEach((row, index) => {
 
-        const mainRange = sheet.getRange(
-          2,
-          1,
-          rows.length,
-          HEADERS.length
-        );
+          const rowNumber = index + 2;
+          const type = rowTypes[index];
 
-        const mainBackgrounds = rows.map((row, index) =>
-          Array(HEADERS.length).fill(
-            index % 2 === 0 ? "#ffffff" : ALTERNATE_COLOR
-          )
-        );
+          if (type === "LEVEL") {
 
-        mainRange.setBackgrounds(mainBackgrounds);
-
-        // Attendance formatting
-
-        if (dates.length > 0) {
-
-          const attendanceRange = sheet.getRange(
-            2,
-            HEADERS.length + 1,
-            rows.length,
-            dates.length
-          );
-
-          attendanceRange
-            .setBackgrounds(backgrounds)
-            .setFontColors(fontColors)
+            sheet.getRange(
+              rowNumber,
+              1,
+              1,
+              totalColumns
+            )
+            .setBackground(LEVEL_COLOR)
+            .setFontColor(HEADER_COLOR)
             .setFontWeight("bold")
-            .setHorizontalAlignment("center");
+            .setFontSize(11)
+            .setVerticalAlignment("middle");
 
-        }
+            sheet.getRange(rowNumber, 1)
+              .setHorizontalAlignment("left");
 
-        // Summary number formatting
+            sheet.setRowHeight(rowNumber, 30);
 
-        sheet.getRange(2, 5, rows.length, 5)
-          .setHorizontalAlignment("center");
+          }
 
-        sheet.getRange(2, 8, rows.length, 2)
-          .setNumberFormat("0.00");
+          else if (type === "GAP") {
+
+            sheet.getRange(
+              rowNumber,
+              1,
+              1,
+              totalColumns
+            ).setBackground("#ffffff");
+
+            sheet.setRowHeight(rowNumber, 10);
+
+          }
+
+          else {
+
+            const mainRange = sheet.getRange(
+              rowNumber,
+              1,
+              1,
+              HEADERS.length
+            );
+
+            mainRange.setBackground(
+              index % 2 === 0
+                ? "#ffffff"
+                : ALTERNATE_COLOR
+            );
+
+            mainRange.setVerticalAlignment("middle");
+
+            sheet.getRange(rowNumber, 5, 1, 5)
+              .setHorizontalAlignment("center");
+
+            sheet.getRange(rowNumber, 8, 1, 2)
+              .setNumberFormat("0.00");
+
+            if (dates.length > 0) {
+
+              const attendanceRange = sheet.getRange(
+                rowNumber,
+                HEADERS.length + 1,
+                1,
+                dates.length
+              );
+
+              const backgrounds = statusesForRow(
+                attendance,
+                row[0],
+                dates
+              ).map(status =>
+                status === "P" ? PRESENT_COLOR : ABSENT_COLOR
+              );
+
+              const fontColors = statusesForRow(
+                attendance,
+                row[0],
+                dates
+              ).map(status =>
+                status === "P" ? "#38761d" : "#990000"
+              );
+
+              attendanceRange
+                .setBackgrounds([backgrounds])
+                .setFontColors([fontColors])
+                .setFontWeight("bold")
+                .setHorizontalAlignment("center");
+
+            }
+
+          }
+
+        });
 
       }
 
-      // Header design
+      // MAIN HEADER DESIGN
 
-      const headerRange = sheet.getRange(
-        1,
-        1,
-        1,
-        headers.length
-      );
-
-      headerRange
+      sheet.getRange(1, 1, 1, totalColumns)
         .setBackground(HEADER_COLOR)
         .setFontColor(HEADER_TEXT_COLOR)
         .setFontWeight("bold")
@@ -297,56 +356,31 @@ function doPost(e) {
 
       sheet.setRowHeight(1, 40);
 
-      // Sheet layout
+      // COLUMN SETTINGS
 
       sheet.setFrozenRows(1);
       sheet.setFrozenColumns(3);
-
-      sheet.autoResizeColumns(1, HEADERS.length);
-
-      // Main column widths
 
       sheet.setColumnWidth(1, 165);
       sheet.setColumnWidth(2, 180);
       sheet.setColumnWidth(3, 140);
       sheet.setColumnWidth(4, 85);
-      sheet.setColumnWidths(5, 5, 105);
-      sheet.setColumnWidth(10, 130);
-      sheet.setColumnWidth(11, 170);
 
-      // Attendance date columns
+      sheet.setColumnWidths(5, 5, 105);
+
+      sheet.setColumnWidth(10, 140);
 
       if (dates.length > 0) {
-
         sheet.setColumnWidths(
           HEADERS.length + 1,
           dates.length,
           75
         );
-
       }
 
-      // Data alignment
+      sheet.autoResizeRows(2, Math.max(outputRows.length, 1));
 
-      if (rows.length > 0) {
-
-        sheet.getRange(
-          2,
-          1,
-          rows.length,
-          headers.length
-        ).setVerticalAlignment("middle");
-
-        sheet.getRange(
-          2,
-          4,
-          rows.length,
-          7
-        ).setHorizontalAlignment("center");
-
-      }
-
-      // Filter
+      // FILTER
 
       if (sheet.getFilter()) {
         sheet.getFilter().remove();
@@ -355,17 +389,15 @@ function doPost(e) {
       sheet.getRange(
         1,
         1,
-        Math.max(rows.length + 1, 1),
-        headers.length
+        Math.max(outputRows.length + 1, 1),
+        totalColumns
       ).createFilter();
-
-      // Tab color
 
       sheet.setTabColor(HEADER_COLOR);
 
     });
 
-    // UPDATE SUMMARY SHEET
+    // SUMMARY SHEET
 
     const summary = getSheet(spreadsheet, "SUMMARY");
 
@@ -403,8 +435,6 @@ function doPost(e) {
       4
     ).setValues(summaryRows);
 
-    // Summary header design
-
     summary.getRange(1, 1, 1, 4)
       .setBackground(HEADER_COLOR)
       .setFontColor(HEADER_TEXT_COLOR)
@@ -412,8 +442,6 @@ function doPost(e) {
       .setHorizontalAlignment("center")
       .setVerticalAlignment("middle")
       .setWrap(true);
-
-    // Summary body design
 
     summary.getRange(2, 1, summaryRows.length, 4)
       .setVerticalAlignment("middle");
@@ -441,10 +469,13 @@ function doPost(e) {
       students: Object.keys(students).length,
       dates: dates.length,
       sorting: "Level ASC, Student ID ASC",
+      levelSections: true,
       syncedAt: new Date().toISOString()
     });
 
-  } catch (error) {
+  }
+
+  catch (error) {
 
     console.error(error);
 
@@ -453,13 +484,32 @@ function doPost(e) {
       message: error.message || String(error)
     });
 
-  } finally {
+  }
+
+  finally {
 
     if (lock.hasLock()) {
       lock.releaseLock();
     }
 
   }
+
+}
+
+
+// ATTENDANCE STATUS
+
+function statusesForRow(attendance, studentId, dates) {
+
+  const studentDates = attendance[studentId] || {};
+
+  return dates.map(date => {
+
+    const record = studentDates[date];
+
+    return record && record.present === true ? "P" : "A";
+
+  });
 
 }
 
